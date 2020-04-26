@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Button, TextInput } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { getUnavailabilityReason } from 'expo/build/AR';
 
 export default function App() {
   const [state, setState] = useState({

@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { Button } from 'react-native-elements';
 
 export default function MapScreen({ route, navigation }) {
-  const { longitude, latitude, address } = route.params;
-
-  useEffect(() => {
-    console.log(address);
-    animateToAddress();
-  }, []);
+  const { latitude, longitude, address } = route.params;
 
   const animateToAddress = () => {
     _mapView.animateToRegion(

@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
-import {
-  Input,
-  Button,
-  Header,
-  Divider,
-  ListItem,
-} from 'react-native-elements';
+import { StyleSheet, View, FlatList } from 'react-native';
+import { Input, Button, Divider, ListItem } from 'react-native-elements';
 import * as SQLite from 'expo-sqlite';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -32,7 +26,7 @@ export default function ListScreen({ navigation }) {
     });
   }, []);
 
-  // Save product
+  // Save address
   const saveItem = () => {
     db.transaction(
       (tx) => {
@@ -45,7 +39,7 @@ export default function ListScreen({ navigation }) {
     );
   };
 
-  // Update shopping list
+  // Update address list
   const updateList = () => {
     db.transaction((tx) => {
       tx.executeSql('select * from addresslist;', [], (_, { rows }) =>
@@ -54,7 +48,7 @@ export default function ListScreen({ navigation }) {
     });
   };
 
-  // Delete product by ID
+  // Delete address by ID
   const deleteItem = (id) => {
     db.transaction(
       (tx) => {
@@ -88,26 +82,22 @@ export default function ListScreen({ navigation }) {
       }),
     };
 
+    let latitude, longitude;
+
     await fetch(url, requestOptions)
       .then((res) => res.json())
-      .then((data) =>
-        setState({
-          ...state,
-          latitude: data.results[0].locations[0].latLng.lat,
-          longitude: data.results[0].locations[0].latLng.lng,
+      .then((data) => {
+        latitude = data.results[0].locations[0].latLng.lat;
+        longitude = data.results[0].locations[0].latLng.lng;
+      })
+      .then(() =>
+        navigation.navigate('Map', {
+          latitude: latitude,
+          longitude: longitude,
+          address,
         })
       )
-      .then(() => console.log(state + '1'))
       .catch((err) => console.error(err));
-
-    console.log(state + '2');
-
-    await navigation.navigate('Map', {
-      latitude: state.latitude,
-      longitude: state.longitude,
-      address: address,
-    });
-    console.log(state + '3');
   };
 
   const renderItem = ({ item }) => {
